@@ -14,7 +14,7 @@ namespace TaskEasy.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private const int LIMITE_PROYECTOS_FREE = 2;
+        private const int LIMITE_PROYECTOS_FREE = 3;
 
         public ProjectsController(AppDbContext context)
         {

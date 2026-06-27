@@ -1,0 +1,28 @@
+### Registrar usuario
+POST http://localhost:5217/api/Auth/register
+Content-Type: application/json
+
+{
+  "username": "erick",
+  "email": "erick@example.com",
+  "password": "123456789"
+}
+
+### Login
+POST http://localhost:5217/api/Auth/login
+Content-Type: application/json
+
+{
+  "username": "erick",
+  "password": "123456789"
+}
+
+### Crear Proyecto (necesitas el token del login)
+POST http://localhost:5217/api/projects
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZXJpY2siLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiUGxhbiI6IkZyZWUiLCJleHAiOjE3ODI1OTMxNTQsImlzcyI6IlRhc2tFYXN5QVBJIiwiYXVkIjoiVGFza0Vhc3lVc3VhcmlvcyJ9.I5iGP1Y59yMHJ1z-sVC9mJN6-O1uqm11YAGZGY4Lxdw
+
+{
+  "nombre": "Mi cuarto Proyecto",
+  "descripcion": "Este es mi cuarto proyecto en TaskEasy"
+}

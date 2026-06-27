@@ -9,7 +9,7 @@ namespace TaskEasy.Models
 
         public int UserId { get; set; }
         public User? User { get; set; }
-
+        
         public decimal Monto { get; set; } = 4999; // ej: precio del plan Pro
 
         // "Tarjeta" o "Paypal"
