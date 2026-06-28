@@ -3,8 +3,8 @@ POST http://localhost:5217/api/Auth/register
 Content-Type: application/json
 
 {
-  "username": "jerel",
-  "email": "jerel@example.com",
+  "username": "maria",
+  "email": "maria@correo.com",
   "password": "123456789"
 }
 
@@ -13,16 +13,33 @@ POST http://localhost:5217/api/Auth/login
 Content-Type: application/json
 
 {
-  "username": "erick",
+  "username": "maria",
   "password": "123456789"
 }
 
-### Crear Proyecto (necesitas el token del login)
+### Crear Proyecto (pega aquí el token devuelto en el login)
 POST http://localhost:5217/api/projects
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZXJpY2siLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiUGxhbiI6IkZyZWUiLCJleHAiOjE3ODI1OTMxNTQsImlzcyI6IlRhc2tFYXN5QVBJIiwiYXVkIjoiVGFza0Vhc3lVc3VhcmlvcyJ9.I5iGP1Y59yMHJ1z-sVC9mJN6-O1uqm11YAGZGY4Lxdw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFyaWEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiUGxhbiI6IkZyZWUiLCJleHAiOjE3ODI2OTE4MDIsImlzcyI6IlRhc2tFYXN5QVBJIiwiYXVkIjoiVGFza0Vhc3lVc3VhcmlvcyJ9.O9LN_MnurwbWiH5tEL8_61I0E9GAl6BzBQIs8dSKiyw
 
 {
   "nombre": "Mi cuarto Proyecto",
   "descripcion": "Este es mi cuarto proyecto en TaskEasy"
 }
+
+### Crear Tarea en un proyecto
+POST http://localhost:5217/api/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFyaWEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiUGxhbiI6IkZyZWUiLCJleHAiOjE3ODI2OTE4MDIsImlzcyI6IlRhc2tFYXN5QVBJIiwiYXVkIjoiVGFza0Vhc3lVc3VhcmlvcyJ9.O9LN_MnurwbWiH5tEL8_61I0E9GAl6BzBQIs8dSKiyw
+
+{
+  "titulo": "Primera tarea",
+  "descripcion": "Tarea creada desde requests.http",
+  "estado": "Pendiente",
+  "fechaLimite": "2026-12-31T00:00:00",
+  "projectId": 1
+}
+
+### Ver tareas de un proyecto
+GET http://localhost:5217/api/tasks/project/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFyaWEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiUGxhbiI6IkZyZWUiLCJleHAiOjE3ODI2OTE4MDIsImlzcyI6IlRhc2tFYXN5QVBJIiwiYXVkIjoiVGFza0Vhc3lVc3VhcmlvcyJ9.O9LN_MnurwbWiH5tEL8_61I0E9GAl6BzBQIs8dSKiyw

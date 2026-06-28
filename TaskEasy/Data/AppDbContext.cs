@@ -34,6 +34,10 @@ namespace TaskEasy.Data
                 .HasForeignKey(pay => pay.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.Monto)
+                .HasPrecision(18, 2);
+
         }
     }
 }
