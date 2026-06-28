@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\UCR\\Modulo 5\\Lenguajes para aplicaciones comerciales\\TaskEasy\\TaskEasy\\TaskEasy.csproj": {}
+    "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\GitHub\\Proyecto3\\TaskEasy\\TaskEasy.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\UCR\\Modulo 5\\Lenguajes para aplicaciones comerciales\\TaskEasy\\TaskEasy\\TaskEasy.csproj": {
+    "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\GitHub\\Proyecto3\\TaskEasy\\TaskEasy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\UCR\\Modulo 5\\Lenguajes para aplicaciones comerciales\\TaskEasy\\TaskEasy\\TaskEasy.csproj",
+        "projectUniqueName": "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\GitHub\\Proyecto3\\TaskEasy\\TaskEasy.csproj",
         "projectName": "TaskEasy",
-        "projectPath": "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\UCR\\Modulo 5\\Lenguajes para aplicaciones comerciales\\TaskEasy\\TaskEasy\\TaskEasy.csproj",
+        "projectPath": "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\GitHub\\Proyecto3\\TaskEasy\\TaskEasy.csproj",
         "packagesPath": "C:\\Users\\jerel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\UCR\\Modulo 5\\Lenguajes para aplicaciones comerciales\\TaskEasy\\TaskEasy\\obj\\",
+        "outputPath": "C:\\Users\\jerel\\Dropbox\\PC\\Documents\\GitHub\\Proyecto3\\TaskEasy\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -62,7 +62,7 @@
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[10.0.8, )"
+              "version": "[10.0.9, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -83,10 +83,6 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[10.0.9, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.6.2, )"
             }
           },
           "imports": [

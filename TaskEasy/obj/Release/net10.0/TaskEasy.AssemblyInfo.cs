@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TaskEasy")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+332500ef68811d70798d9fd5dd89ff385bef2be0")]
 [assembly: System.Reflection.AssemblyProductAttribute("TaskEasy")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TaskEasy")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar a Pro - TaskEasy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="w-full border-b border-gray-100 bg-white">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2.5 group">
+                <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-sm group-hover:bg-indigo-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                </div>
+                <span class="text-xl font-bold text-gray-900 tracking-tight">TaskEasy</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <span id="userName" class="text-sm text-gray-500"></span>
+                <button onclick="cerrarSesion()" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Cerrar sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center px-6 py-12">
+
+        <!-- Payment Card -->
+        <div class="w-full max-w-md">
+
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Actualiza a Plan Pro</h1>
+                <p class="text-gray-500 text-sm">Desbloquea todo el potencial de TaskEasy</p>
+            </div>
+
+            <!-- Benefits -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center gap-3 text-sm text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg> Proyectos ilimitados
+                    </li>
+                    <li class="flex items-center gap-3 text-sm text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg> Tareas ilimitadas por proyecto
+                    </li>
+                    <li class="flex items-center gap-3 text-sm text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg> Prioridad en soporte técnico
+                    </li>
+                </ul>
+                <div class="border-t border-gray-100 pt-4 text-center">
+                    <span class="text-3xl font-extrabold text-gray-900">₡4,999</span>
+                    <span class="text-gray-500 text-sm"> / mes</span>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div id="formContainer" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <form id="paymentForm" onsubmit="procesarPago(event)" class="space-y-5">
+
+                    <!-- Method Selector -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Método de pago</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="metodo" value="TARJETA" checked class="peer sr-only" onchange="toggleMetodo()">
+                                <div class="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl peer-checked:border-indigo-600 peer-checked:bg-indigo-50 transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 peer-checked:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                    </svg>
+                                    <span class="text-sm font-medium text-gray-700 peer-checked:text-indigo-900">Tarjeta</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="metodo" value="PAYPAL" class="peer sr-only" onchange="toggleMetodo()">
+                                <div class="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl peer-checked:border-indigo-600 peer-checked:bg-indigo-50 transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 peer-checked:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    <span class="text-sm font-medium text-gray-700 peer-checked:text-indigo-900">PayPal</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Card Fields -->
+                    <div id="camposTarjeta" class="space-y-4">
+                        <div>
+                            <label for="numeroTarjeta" class="block text-sm font-medium text-gray-700 mb-1.5">Número de tarjeta</label>
+                            <input type="text" id="numeroTarjeta" maxlength="16" placeholder="0000 0000 0000 0000" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-mono tracking-widest"
+                                oninput="this.value = this.value.replace(/\D/g, '')">
+                        </div>
+                        <div>
+                            <label for="nombreTitular" class="block text-sm font-medium text-gray-700 mb-1.5">Nombre del titular</label>
+                            <input type="text" id="nombreTitular" placeholder="Como aparece en la tarjeta" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label for="cvv" class="block text-sm font-medium text-gray-700 mb-1.5">CVV</label>
+                            <input type="text" id="cvv" maxlength="3" placeholder="123" class="w-1/3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-mono tracking-widest"
+                                oninput="this.value = this.value.replace(/\D/g, '')">
+                        </div>
+                    </div>
+
+                    <!-- PayPal Fields -->
+                    <div id="camposPaypal" class="hidden">
+                        <div class="p-4 bg-blue-50 border border-blue-100 rounded-xl text-center">
+                            <p class="text-sm text-blue-800">Serás redirigido a PayPal para completar el pago.</p>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" id="btnPagar" class="w-full px-5 py-3.5 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm flex items-center justify-center gap-2">
+                        <span id="btnTexto">Pagar ₡4,999</span>
+                        <svg id="btnSpinner" class="hidden w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+
+                    <p class="text-xs text-gray-400 text-center leading-relaxed">
+                        Este es un pago simulado para fines académicos.<br>No se procesa ningún cobro real.
+                    </p>
+                </form>
+            </div>
+
+            <!-- Success Result -->
+            <div id="resultadoExito" class="hidden bg-white rounded-2xl border border-green-100 shadow-sm p-8 text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">¡Pago aprobado!</h2>
+                <p class="text-gray-500 text-sm mb-6">Tu cuenta ha sido actualizada a Plan Pro. Disfruta de todos los beneficios.</p>
+                <a href="dashboard.html" class="inline-flex items-center justify-center w-full px-5 py-3 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm">
+                    Volver a mis proyectos
+                </a>
+            </div>
+
+            <!-- Error Result -->
+            <div id="resultadoError" class="hidden bg-white rounded-2xl border border-red-100 shadow-sm p-8 text-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">Pago rechazado</h2>
+                <p id="errorMensaje" class="text-gray-500 text-sm mb-6">No se pudo procesar el pago. Verifica los datos e intenta nuevamente.</p>
+                <button onclick="reintentar()" class="inline-flex items-center justify-center w-full px-5 py-3 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm">
+                    Intentar de nuevo
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-white border-t border-gray-100 py-6">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-sm text-gray-400">Proyecto IF4101 - Sede del Caribe, UCR · 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN
+        // ============================================
+
+        const MODO_DESARROLLO = true;
+        const API_URL = 'http://localhost:8080/api';
+
+        const datosDemo = {
+            token: 'demo-token-jwt',
+            user: {
+                nombre: 'Usuario Demo',
+                plan: 'FREE'
+            }
+        };
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+
+        if (MODO_DESARROLLO && !localStorage.getItem('token')) {
+            localStorage.setItem('token', datosDemo.token);
+            localStorage.setItem('user', JSON.stringify(datosDemo.user));
+        }
+
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (!MODO_DESARROLLO && !token) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('userName').textContent = user.nombre || 'Usuario';
+
+        // ============================================
+        // FUNCIONES
+        // ============================================
+
+        function toggleMetodo() {
+            const metodo = document.querySelector('input[name="metodo"]:checked').value;
+            document.getElementById('camposTarjeta').classList.toggle('hidden', metodo !== 'TARJETA');
+            document.getElementById('camposPaypal').classList.toggle('hidden', metodo !== 'PAYPAL');
+            document.getElementById('btnTexto').textContent = metodo === 'TARJETA' ? 'Pagar ₡4,999' : 'Continuar con PayPal';
+        }
+
+        function setLoading(cargando) {
+            document.getElementById('btnTexto').classList.toggle('hidden', cargando);
+            document.getElementById('btnSpinner').classList.toggle('hidden', !cargando);
+            document.getElementById('btnPagar').disabled = cargando;
+            document.getElementById('btnPagar').classList.toggle('opacity-75', cargando);
+        }
+
+        function mostrarExito() {
+            document.getElementById('formContainer').classList.add('hidden');
+            document.getElementById('resultadoExito').classList.remove('hidden');
+            document.getElementById('resultadoError').classList.add('hidden');
+        }
+
+        function mostrarError(mensaje) {
+            document.getElementById('formContainer').classList.add('hidden');
+            document.getElementById('resultadoError').classList.remove('hidden');
+            document.getElementById('resultadoExito').classList.add('hidden');
+            if (mensaje) document.getElementById('errorMensaje').textContent = mensaje;
+        }
+
+        function reintentar() {
+            document.getElementById('formContainer').classList.remove('hidden');
+            document.getElementById('resultadoError').classList.add('hidden');
+            document.getElementById('paymentForm').reset();
+            toggleMetodo();
+        }
+
+        async function procesarPago(e) {
+            e.preventDefault();
+
+            const metodo = document.querySelector('input[name="metodo"]:checked').value;
+            const numeroTarjeta = document.getElementById('numeroTarjeta').value.trim();
+            const nombreTitular = document.getElementById('nombreTitular').value.trim();
+            const cvv = document.getElementById('cvv').value.trim();
+
+            // Validación
+            if (metodo === 'TARJETA') {
+                if (!numeroTarjeta || !nombreTitular || !cvv) {
+                    alert('Por favor completa todos los campos');
+                    return;
+                }
+                if (numeroTarjeta.length !== 16) {
+                    alert('El número de tarjeta debe tener 16 dígitos');
+                    return;
+                }
+                if (cvv.length !== 3) {
+                    alert('El CVV debe tener 3 dígitos');
+                    return;
+                }
+            }
+
+            setLoading(true);
+
+            if (MODO_DESARROLLO) {
+                // Simular delay de red
+                await new Promise(r => setTimeout(r, 1500));
+                setLoading(false);
+                // Simular éxito siempre en demo
+                mostrarExito();
+                // Actualizar plan en localStorage
+                user.plan = 'PRO';
+                localStorage.setItem('user', JSON.stringify(user));
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/payments/checkout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        metodo,
+                        numeroTarjeta: metodo === 'TARJETA' ? numeroTarjeta : null,
+                        nombreTitular: metodo === 'TARJETA' ? nombreTitular : null,
+                        cvv: metodo === 'TARJETA' ? cvv : null
+                    })
+                });
+
+                setLoading(false);
+
+                if (res.status === 401) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                if (res.ok) {
+                    mostrarExito();
+                } else {
+                    const data = await res.json().catch(() => ({}));
+                    mostrarError(data.mensaje || 'No se pudo procesar el pago. Intenta con otro método.');
+                }
+            } catch (e) {
+                setLoading(false);
+                mostrarError('Error de conexión. Verifica tu conexión a internet.');
+            }
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+    </script>
+
+</body>
+
+</html>

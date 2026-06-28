@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto - TaskEasy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="w-full border-b border-gray-100 bg-white">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="flex items-center gap-2.5 group">
+                    <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-sm group-hover:bg-indigo-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold text-gray-900 tracking-tight">TaskEasy</span>
+                </a>
+                <a href="dashboard.html" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg> Mis proyectos
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="userName" class="text-sm text-gray-500"></span>
+                <a href="index.html" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Cerrar sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-6 py-8">
+
+        <!-- Project Header -->
+        <div class="mb-8">
+            <h1 id="nombreProyecto" class="text-3xl font-bold text-gray-900 mb-2"></h1>
+            <p id="descripcionProyecto" class="text-gray-500 text-lg"></p>
+        </div>
+
+        <!-- Actions Bar -->
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-semibold text-gray-900">Tareas</h2>
+            <button onclick="abrirModal()" class="px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                Nueva tarea
+            </button>
+        </div>
+
+        <!-- Free Plan Limit Banner -->
+        <div id="limiteBanner" class="hidden mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p class="text-sm text-amber-800">Has alcanzado el límite de tareas en el plan Free.</p>
+            </div>
+            <a href="pago.html" class="text-sm font-semibold text-amber-700 hover:text-amber-900 underline">Mejorar a Pro</a>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20">
+            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Aún no tienes tareas</h3>
+            <p class="text-gray-500 text-sm">Crea tu primera tarea para comenzar a organizar este proyecto.</p>
+        </div>
+
+        <!-- Tasks List -->
+        <div id="tasksList" class="space-y-3"></div>
+
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop absolute inset-0" onclick="cerrarModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-lg relative z-10">
+                <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+                    <h3 id="modalTitulo" class="text-lg font-bold text-gray-900">Nueva tarea</h3>
+                    <button onclick="cerrarModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form id="taskForm" onsubmit="guardarTarea(event)" class="p-6 space-y-5">
+                    <input type="hidden" id="taskId">
+
+                    <div>
+                        <label for="titulo" class="block text-sm font-medium text-gray-700 mb-1.5">Título</label>
+                        <input type="text" id="titulo" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" placeholder="Nombre de la tarea">
+                    </div>
+
+                    <div>
+                        <label for="descripcion" class="block text-sm font-medium text-gray-700 mb-1.5">Descripción</label>
+                        <textarea id="descripcion" rows="3" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none" placeholder="Describe los detalles de la tarea..."></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="estado" class="block text-sm font-medium text-gray-700 mb-1.5">Estado</label>
+                            <select id="estado" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                <option value="PENDIENTE">Pendiente</option>
+                                <option value="EN_PROGRESO">En Progreso</option>
+                                <option value="COMPLETADA">Completada</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="fechaLimite" class="block text-sm font-medium text-gray-700 mb-1.5">Fecha límite</label>
+                            <input type="date" id="fechaLimite" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3 pt-2">
+                        <button type="button" onclick="cerrarModal()" class="px-5 py-2.5 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full bg-white border-t border-gray-100 py-6">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-sm text-gray-400">Proyecto IF4101 - Sede del Caribe, UCR · 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        /*const token = localStorage.getItem('token');
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id');
+
+        if (!token || !projectId) {
+            window.location.href = 'login.html';
+        }*/
+
+        const token = localStorage.getItem('token') || 'demo-token';
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id') || '1';
+
+        // Validación suave: si no hay token ni estamos en modo desarrollo, redirige
+        if (!localStorage.getItem('token') && window.location.hostname !== 'localhost') {
+            window.location.href = 'login.html';
+        }
+
+        // Obtener datos del usuario
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        document.getElementById('userName').textContent = user.nombre || 'Usuario';
+
+        // Cargar proyecto y tareas al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarProyecto();
+            cargarTareas();
+        });
+
+        async function cargarProyecto() {
+            try {
+                const res = await fetch(`${API_URL}/projects/${projectId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (res.status === 401) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                if (!res.ok) return;
+
+                const proyecto = await res.json();
+                document.getElementById('nombreProyecto').textContent = proyecto.nombre;
+                document.getElementById('descripcionProyecto').textContent = proyecto.descripcion || '';
+            } catch (e) {
+                console.error('Error cargando proyecto:', e);
+            }
+        }
+
+        async function cargarTareas() {
+            try {
+                const res = await fetch(`${API_URL}/tasks/project/${projectId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (res.status === 401) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                if (!res.ok) return;
+
+                const tareas = await res.json();
+                renderizarTareas(tareas);
+            } catch (e) {
+                console.error('Error cargando tareas:', e);
+            }
+        }
+
+        function renderizarTareas(tareas) {
+            const container = document.getElementById('tasksList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (tareas.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.innerHTML = tareas.map(t => {
+                        const estadoConfig = {
+                            'PENDIENTE': {
+                                bg: 'bg-amber-100',
+                                text: 'text-amber-800',
+                                label: 'Pendiente'
+                            },
+                            'EN_PROGRESO': {
+                                bg: 'bg-blue-100',
+                                text: 'text-blue-800',
+                                label: 'En Progreso'
+                            },
+                            'COMPLETADA': {
+                                bg: 'bg-green-100',
+                                text: 'text-green-800',
+                                label: 'Completada'
+                            }
+                        };
+                        const est = estadoConfig[t.estado] || estadoConfig['PENDIENTE'];
+
+                        return `
+                    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-base font-semibold text-gray-900">${t.titulo}</h3>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${est.bg} ${est.text}">
+                                        ${est.label}
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-500 mb-3 line-clamp-2">${t.descripcion || ''}</p>
+                                ${t.fechaLimite ? `
+                                    <div class="flex items-center gap-1.5 text-xs text-gray-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        ${new Date(t.fechaLimite).toLocaleDateString('es-ES')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="flex items-center gap-1 flex-shrink-0">
+                                <button onclick="editarTarea(${t.id})" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Editar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </button>
+                                <button onclick="eliminarTarea(${t.id})" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function abrirModal(tarea = null) {
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('taskForm').reset();
+            document.getElementById('taskId').value = '';
+
+            if (tarea) {
+                document.getElementById('modalTitulo').textContent = 'Editar tarea';
+                document.getElementById('taskId').value = tarea.id;
+                document.getElementById('titulo').value = tarea.titulo;
+                document.getElementById('descripcion').value = tarea.descripcion || '';
+                document.getElementById('estado').value = tarea.estado;
+                document.getElementById('fechaLimite').value = tarea.fechaLimite ? tarea.fechaLimite.split('T')[0] : '';
+            } else {
+                document.getElementById('modalTitulo').textContent = 'Nueva tarea';
+            }
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        async function guardarTarea(e) {
+            e.preventDefault();
+            const id = document.getElementById('taskId').value;
+            const data = {
+                titulo: document.getElementById('titulo').value,
+                descripcion: document.getElementById('descripcion').value,
+                estado: document.getElementById('estado').value,
+                fechaLimite: document.getElementById('fechaLimite').value || null,
+                proyectoId: parseInt(projectId)
+            };
+
+            const url = id ? `${API_URL}/tasks/${id}` : `${API_URL}/tasks`;
+            const method = id ? 'PUT' : 'POST';
+
+            try {
+                const res = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.status === 401) { window.location.href = 'login.html'; return; }
+                if (res.status === 403) {
+                    document.getElementById('limiteBanner').classList.remove('hidden');
+                    cerrarModal();
+                    return;
+                }
+                if (!res.ok) return;
+
+                cerrarModal();
+                cargarTareas();
+            } catch (e) {
+                console.error('Error guardando tarea:', e);
+            }
+        }
+
+        async function editarTarea(id) {
+            try {
+                const res = await fetch(`${API_URL}/tasks/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.status === 401) { window.location.href = 'login.html'; return; }
+                if (!res.ok) return;
+
+                const tarea = await res.json();
+                abrirModal(tarea);
+            } catch (e) {
+                console.error('Error cargando tarea:', e);
+            }
+        }
+
+        async function eliminarTarea(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar esta tarea?')) return;
+
+            try {
+                const res = await fetch(`${API_URL}/tasks/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.status === 401) { window.location.href = 'login.html'; return; }
+                if (!res.ok) return;
+
+                cargarTareas();
+            } catch (e) {
+                console.error('Error eliminando tarea:', e);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
