@@ -24,4 +24,20 @@ namespace TaskEasy.Models.DTOs
         [Required]
         public string Password { get; set; } = string.Empty;
     }
+
+    public class AdminUserEditDTO
+    {
+        [Required]
+        public string Username { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Role { get; set; } = "User";
+
+        [Required]
+        public string Plan { get; set; } = "Free";
+    }
 }

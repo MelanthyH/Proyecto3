@@ -4,6 +4,13 @@ const API_URL = "http://localhost:5217/api";
 function guardarSesion(token, usuario) {
     localStorage.setItem("token", token);
     localStorage.setItem("usuario", JSON.stringify(usuario));
+
+    const nombre = usuario.username || usuario.nombre || usuario.Username || usuario.name || '';
+    let planRaw = usuario.plan || usuario.Plan || usuario.role || '';
+    planRaw = (typeof planRaw === 'string') ? planRaw.trim().toLowerCase() : '';
+    const plan = (planRaw === 'pro' || planRaw === 'p' || planRaw === 'premium') ? 'PRO' : 'FREE';
+
+    localStorage.setItem("user", JSON.stringify({ nombre, plan }));
 }
 
 function obtenerToken() {

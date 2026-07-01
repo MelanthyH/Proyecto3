@@ -23,4 +23,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\frontend\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Link>frontend\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>
+  </ItemGroup>
+
 </Project>

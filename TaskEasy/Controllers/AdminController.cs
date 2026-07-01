@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskEasy.Data;
+using TaskEasy.Models.DTOs;
 
 namespace TaskEasy.Controllers
 {
@@ -15,6 +16,26 @@ namespace TaskEasy.Controllers
         public AdminController(AppDbContext context)
         {
             _context = context;
+        }
+
+        // PUT
+        [HttpPut("users/{id}")]
+        public async Task<IActionResult> EditarUsuario(int id, [FromBody] AdminUserEditDTO dto)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return NotFound();
+
+            // Validar que username/email no estén en uso por otro usuario
+            bool otroUser = await _context.Users.AnyAsync(u => u.Id != id && (u.Username == dto.Username || u.Email == dto.Email));
+            if (otroUser) return BadRequest("El nombre de usuario o correo ya está en uso por otro usuario.");
+
+            user.Username = dto.Username;
+            user.Email = dto.Email;
+            user.Role = dto.Role;
+            user.Plan = dto.Plan;
+
+            await _context.SaveChangesAsync();
+            return Ok(new { mensaje = "Usuario actualizado." });
         }
 
         // GET

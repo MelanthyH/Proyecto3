@@ -22,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             alert("¡Cuenta creada correctamente! Ahora puedes iniciar sesión.");
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('usuario');
             window.location.href = "login.html";
 
         } catch (error) {

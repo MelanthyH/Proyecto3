@@ -59,7 +59,7 @@ namespace TaskEasy.Controllers
             {
                 int cantidad = await _context.Projects.CountAsync(p => p.UserId == userId);
                 if (cantidad >= LIMITE_PROYECTOS_FREE)
-                    return BadRequest($"Límite de {LIMITE_PROYECTOS_FREE} proyectos alcanzado en el plan Free. Actualiza a Pro para crear más.");
+                    return Forbid();
             }
 
             var proyecto = new Project

@@ -130,6 +130,7 @@
                         <div class="p-4 bg-blue-50 border border-blue-100 rounded-xl text-center">
                             <p class="text-sm text-blue-800">Serás redirigido a PayPal para completar el pago.</p>
                         </div>
+                        <div id="paypal-button-container" class="mt-4"></div>
                     </div>
 
                     <!-- Submit -->
@@ -181,17 +182,17 @@
     <!-- Footer -->
     <footer class="w-full bg-white border-t border-gray-100 py-6">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-sm text-gray-400">Proyecto IF4101 - Sede del Caribe, UCR · 2025</p>
+            <p class="text-sm text-gray-400">Proyecto IF4101 - Sede del Caribe, UCR · 2026</p>
         </div>
     </footer>
 
     <script>
-        // ============================================
-        // CONFIGURACIÓN
-        // ============================================
 
-        const MODO_DESARROLLO = false;
-        const API_URL = 'http://localhost:5217/api';
+        // CONFIGURACIÓN
+
+    const MODO_DESARROLLO = false;
+    const API_URL = '/api';
+    const PAYPAL_CLIENT_ID = 'ATFQ19QO0bo29dnYvIyDYYJWNpj7n0JLLyYhQCeeY02db7gSApq5uzHrRBMgWFqcy2mrkY2q2eHHQk4M';
 
         const datosDemo = {
             token: 'demo-token-jwt',
@@ -201,9 +202,7 @@
             }
         };
 
-        // ============================================
         // INICIALIZACIÓN
-        // ============================================
 
         if (MODO_DESARROLLO && !localStorage.getItem('token')) {
             localStorage.setItem('token', datosDemo.token);
@@ -219,15 +218,14 @@
 
         document.getElementById('userName').textContent = user.nombre || 'Usuario';
 
-        // ============================================
         // FUNCIONES
-        // ============================================
 
         function toggleMetodo() {
             const metodo = document.querySelector('input[name="metodo"]:checked').value;
             document.getElementById('camposTarjeta').classList.toggle('hidden', metodo !== 'TARJETA');
             document.getElementById('camposPaypal').classList.toggle('hidden', metodo !== 'PAYPAL');
             document.getElementById('btnTexto').textContent = metodo === 'TARJETA' ? 'Pagar ₡4,999' : 'Continuar con PayPal';
+            if (metodo === 'PAYPAL') renderPayPalButtons();
         }
 
         function setLoading(cargando) {
@@ -284,44 +282,68 @@
             setLoading(true);
 
             if (MODO_DESARROLLO) {
-                // Simular delay de red
                 await new Promise(r => setTimeout(r, 1500));
                 setLoading(false);
-                // Simular éxito siempre en demo
                 mostrarExito();
-                // Actualizar plan en localStorage
                 user.plan = 'PRO';
                 localStorage.setItem('user', JSON.stringify(user));
                 return;
             }
 
             try {
-                const res = await fetch(`${API_URL}/payments/checkout`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        metodo,
-                        numeroTarjeta: metodo === 'TARJETA' ? numeroTarjeta : null,
-                        nombreTitular: metodo === 'TARJETA' ? nombreTitular : null,
-                        cvv: metodo === 'TARJETA' ? cvv : null
-                    })
-                });
+                if (metodo === 'TARJETA') {
+                    const res = await fetch(`${API_URL}/payments/checkout`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            metodo,
+                            numeroTarjeta: numeroTarjeta,
+                            nombreTitular: nombreTitular,
+                            cvv: cvv
+                        })
+                    });
 
-                setLoading(false);
+                    setLoading(false);
 
-                if (res.status === 401) {
-                    window.location.href = 'login.html';
-                    return;
-                }
+                    if (res.status === 401) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
 
-                if (res.ok) {
-                    mostrarExito();
-                } else {
-                    const data = await res.json().catch(() => ({}));
-                    mostrarError(data.mensaje || 'No se pudo procesar el pago. Intenta con otro método.');
+                    if (res.ok) {
+                        mostrarExito();
+                    } else {
+                        const data = await res.json().catch(() => ({}));
+                        mostrarError(data.mensaje || 'No se pudo procesar el pago. Intenta con otro método.');
+                    }
+                } else if (metodo === 'PAYPAL') {
+                    // Renderizar el botón y disparar el flujo automáticamente
+                    renderPayPalButtons();
+                    const tryClick = async (attempt = 0) => {
+                        const container = document.getElementById('paypal-button-container');
+                        if (!container) {
+                            if (attempt < 10) return setTimeout(() => tryClick(attempt + 1), 300);
+                            setLoading(false);
+                            mostrarError('No se pudo inicializar PayPal. Intenta recargar la página.');
+                            return;
+                        }
+
+                        const btn = container.querySelector('button');
+                        if (btn) {
+                            setLoading(false);
+                            try { btn.click(); } catch (e) { console.error(e); }
+                            return;
+                        }
+
+                        if (attempt < 10) return setTimeout(() => tryClick(attempt + 1), 300);
+                        setLoading(false);
+                        mostrarError('No se encontró el botón de PayPal. Intenta recargar.');
+                    };
+
+                    tryClick();
                 }
             } catch (e) {
                 setLoading(false);
@@ -334,7 +356,80 @@
             localStorage.removeItem('user');
             window.location.href = 'login.html';
         }
+
+        // PayPal integration
+        let paypalButtonsRendered = false;
+        let _paypalButtonsInstance = null;
+        function renderPayPalButtons(retries = 0) {
+            if (paypalButtonsRendered) return;
+            if (typeof paypal === 'undefined') {
+                if (retries < 10) setTimeout(() => renderPayPalButtons(retries + 1), 300);
+                return;
+            }
+
+            const container = document.getElementById('paypal-button-container');
+            if (!container) {
+                if (retries < 10) setTimeout(() => renderPayPalButtons(retries + 1), 300);
+                return;
+            }
+            // esperar a que el contenedor sea visible
+            const style = window.getComputedStyle(container);
+            if (style && (style.display === 'none' || style.visibility === 'hidden' || container.offsetParent === null)) {
+                if (retries < 10) setTimeout(() => renderPayPalButtons(retries + 1), 300);
+                return;
+            }
+
+            _paypalButtonsInstance = paypal.Buttons({
+                createOrder: function () {
+                    // Llamar al backend para crear la orden
+                    return fetch(`${API_URL}/paypal/create-order`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ amount: 4999 / 100.0, currency: 'USD' })
+                    })
+                        .then(res => res.json())
+                        .then(data => data.orderId);
+                },
+                onApprove: function (data) {
+                    // Capturar la orden en el backend
+                    return fetch(`${API_URL}/paypal/capture-order`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ orderId: data.orderID })
+                    })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Capture failed');
+                            return res.json();
+                        })
+                        .then(result => {
+                            mostrarExito();
+                        })
+                        .catch(err => {
+                            mostrarError('No se pudo completar el pago con PayPal.');
+                        });
+                }
+            });
+
+            // Renderizar y marcar como renderizado cuando esté listo
+            _paypalButtonsInstance.render('#paypal-button-container').then(() => {
+                paypalButtonsRendered = true;
+            }).catch(err => {
+                console.error('PayPal render error', err);
+                if (retries < 10) setTimeout(() => {
+                    paypalButtonsRendered = false;
+                    renderPayPalButtons(retries + 1);
+                }, 300);
+            });
+        }
     </script>
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ATFQ19QO0bo29dnYvIyDYYJWNpj7n0JLLyYhQCeeY02db7gSApq5uzHrRBMgWFqcy2mrkY2q2eHHQk4M&currency=USD"></script>
 
 </body>
 

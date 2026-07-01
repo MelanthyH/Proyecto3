@@ -12,7 +12,6 @@ namespace TaskEasy.Models
 
         public string? Descripcion { get; set; }
 
-        // "Pendiente", "EnProgreso", "Completada"
         [Required]
         public string Estado { get; set; } = "Pendiente";
 

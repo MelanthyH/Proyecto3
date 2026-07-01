@@ -1,4 +1,7 @@
+using System.IO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -20,6 +23,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext")));
 
 builder.Services.AddScoped<TokenService>();
+// PayPal service
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<PayPalService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -58,11 +64,26 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseDefaultFiles();
-app.UseStaticFiles();
+
+var frontendPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "frontend"));
+var frontendProvider = new PhysicalFileProvider(frontendPath);
+app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = frontendProvider });
+app.UseStaticFiles(new StaticFileOptions { FileProvider = frontendProvider, RequestPath = "" });
 app.UseCors("PermitirCliente");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapFallbackToFile("index.html");
+app.MapFallback(async context =>
+{
+    var file = frontendProvider.GetFileInfo("index.html");
+    if (file.Exists)
+    {
+        context.Response.ContentType = "text/html";
+        await context.Response.SendFileAsync(file);
+    }
+    else
+    {
+        context.Response.StatusCode = 404;
+    }
+});
 app.Run();
